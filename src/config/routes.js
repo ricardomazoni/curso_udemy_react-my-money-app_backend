@@ -16,11 +16,17 @@ module.exports = function (server) {
     */
     const protectedApi = express.Router()
     server.use('/api', protectedApi)
+    /**
+     * Chamada que protege a api...
+     */
     protectedApi.use(auth)
 
     const BillingCycle = require('../api/billingCycle/billingCycleService')
     BillingCycle.register(protectedApi, '/billingCycles')
 
+    const CadEqp = require('../api/equipamento/cadEquipamentoService')
+    CadEqp.register(protectedApi, '/billingCycles')
+    
     /*
     * Rotas abertas
     */

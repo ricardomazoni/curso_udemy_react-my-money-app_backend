@@ -1,0 +1,168 @@
+
+-- Usando os comandos do mongoDB
+-> Orientado por documento Json
+-> Banco não relacional, ele tem api propria para 
+consumir os dados
+
+* Escalonamento
+  - Vertical vs Horizontal
+  - Vertical -> para bd relacionado com linhas e colunas
+  - Horizontal -> os dados são distribuidos sem 
+  relacionamento
+
+  * Comandos basicos 
+   - Enteder as operações e agregação de entendimento da api
+
+   mongo -> para entrar no mongo(claro depois de instalado) 
+   
+   show dbs -> listar os banco de dados
+   
+   use db_finance -> esta direcionando para 
+   esse BD(mesmo ele não criado o mesmo criado 
+   é criado na memoria, com isso já seta para o mesmo)
+
+   db -> depois do 'use' esse comando mostra o BD que
+   esta sendo usado
+
+   db.createCollection('billingCycles') -> cria uma 
+   collection/tabela para o BD em uso
+
+   show collections -> mostra todas as collections/tabelas
+   daquele BD
+
+   db.billingCycles.drop()-> apaga a tabela
+
+   Quando não mais collections para o BD o 
+   mesmo é excluido automaticamente
+   
+* INSERT
+    db.billingCycles.insert({
+        name: "Janeiro/17", 
+        month: 1, 
+        year: 2017
+    })
+
+    save -> Insere ou atualiza
+
+    db.billingCycles.save({
+        name: "Fevereiro/17", 
+        month: 2, 
+        year: 2017
+
+    })
+
+   Inserindo atributos com array
+
+   db.billingCycles.insert({
+       name: "Marco/17",
+       month: 3,
+       year: 2017,
+       credits:[
+           {name: "Salario", value: 5000}
+       ],
+       debts:[
+           {name: "Luz", value: 100, status: "PAGO"},
+           {name: "Telefone", value: 100, status: "PENDENTE"}
+       ]
+       
+   })
+
+
+* CONSULTAS
+
+    db.billingCycles.find() -> Lista todas os registros
+da collection
+
+    db.billingCycles.find().pretty() -> Lista todas os registros
+da collection com o formato Json
+
+    db.billingCycles.findOne() -> traz o primeiro registro da 
+collection    
+
+    db.billingCycles.findOne({month: 2}) -> filtra somente o mês 02
+
+    db.billingCycles.find({
+        $or: [
+            {month: 1}, {month: 2}
+        ]
+    }).pretty()
+
+    db.billingCycles.find({
+        credits:{
+            $exists:true
+        }
+    }).pretty()
+
+    db.billingCycles.find({
+        year:2017
+    }).skip(1)
+
+    db.billingCycles.find({
+        year:2017
+    }).skip(1).limit(1)
+
+    db.billingCycles.find(
+        {
+            credits:{
+                $exists:true
+            }
+        },
+        {
+            _id:0, name:1
+        }
+    ).pretty()
+
+* AGGREGATION
+    $project -> projeta os dados que te interessa, pode
+ser a somatoria dos valores
+     $group > agrupa os dados pelo filtro especifico    
+
+    db.billingCycles.aggregate([
+        {
+            $project:{
+                credit:{
+                    $sum: "$credits.value"
+                },
+                debt:{
+                    $sum: "$debts.value"
+                }
+            }
+        },
+        {
+            $group: {
+                _id: null, 
+                credit:{
+                    $sum:"$credit"
+                }, 
+                debt:{
+                    $sum:"$debt"
+                }
+            }
+        }
+    ])
+
+* ATUALIZAÇÃO /UPDATE
+
+    db.billingCycles.update(
+        {
+            $and:[
+                {month:1},
+                {year:2017}
+            ]
+        },
+        {
+            $set:{
+                credits:[
+                    {name: "Salario", value: 5000}
+                ]
+            }
+        }
+    )
+
+* Contador
+    db.billingCycles.count()
+
+* REMOVE / DELETE
+
+    db.billingCycles.remove({month:2}) -> remove somente o mes 2
+    db.billingCycles.remove({year:2017},1) -> remove somente 1 
