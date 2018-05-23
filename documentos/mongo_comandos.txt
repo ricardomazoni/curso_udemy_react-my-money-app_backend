@@ -11,7 +11,7 @@ consumir os dados
   relacionamento
 
   * Comandos basicos 
-   - Enteder as operações e agregação de entendimento da api
+   - Entender as operações e agregação de entendimento da api
 
    mongo -> para entrar no mongo(claro depois de instalado) 
    
