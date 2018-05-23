@@ -3,14 +3,6 @@ const auth = require('./auth')
 
 module.exports = function (server) {
 
-    // //Definir URL base para todas as rotas
-    // const router = express.Router()
-    // server.use('/api',router)
-
-    // //Rotas de Ciclo de Pagamento
-    // const BillingCycle = require('../api/billingCycle/billingCycleService')
-    // BillingCycle.register(router,'/billingCycles')
-
     /*
     * Rotas protegidas por Token JWT
     */
@@ -19,13 +11,13 @@ module.exports = function (server) {
     /**
      * Chamada que protege a api...
      */
-    protectedApi.use(auth)
+    // protectedApi.use(auth)
 
     const BillingCycle = require('../api/billingCycle/billingCycleService')
     BillingCycle.register(protectedApi, '/billingCycles')
 
-    const CadEqp = require('../api/equipamento/cadEquipamentoService')
-    CadEqp.register(protectedApi, '/billingCycles')
+    const Equipamento = require('../api/equipamento/equipamentoService')
+    Equipamento.register(protectedApi, '/equipamentos')
     
     /*
     * Rotas abertas
