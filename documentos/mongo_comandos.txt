@@ -166,3 +166,10 @@ ser a somatoria dos valores
 
     db.billingCycles.remove({month:2}) -> remove somente o mes 2
     db.billingCycles.remove({year:2017},1) -> remove somente 1 
+
+    db.equipamentos.insert(
+        { nr_equip: "0023052018", descricao: "Rit-200", observacao: "Segundo equipamento" }
+    )
+    db.equipamentos.insert(
+        { nr_equip: "0022052018", descricao: "Rit-200", observacao: "Primeiro equipamento" }
+    )
